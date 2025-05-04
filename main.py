@@ -27,7 +27,7 @@ def get_bmi_recommendation(bmi):
         return "Рекомендуется увеличить физическую активность и скорректировать питание"
 
 
-def calculate_ideal-weight(height, gender='unisex'):
+def calculate_ideal_weight(height, gender='unisex'):
     """По формуле Devine (1974)"""
     if gender.lower() == 'male':
         return 50 + 2.3 * ((height * 100) - 152.4) / 2.54
@@ -35,6 +35,14 @@ def calculate_ideal-weight(height, gender='unisex'):
         return 45.5 + 2.3 * ((height * 100) - 152.4) / 2.54
     else:
         return (50 + 45.5) / 2 + 2.3 * ((height * 100) - 152.4) / 2.54
+
+def calculate_daily_calories(weight, height, age, gender, activity_level=1.2):
+    """Формула Миффлина-Сан Жеора"""
+    if gender.lower() == 'male':
+        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age + 5
+    else:
+        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age - 161
+    return bmr * activity_level
 
 def validate_input(value, min_val, max_val):
     try:
@@ -77,7 +85,9 @@ def main():
 
     # Расчеты
     bmi = calculate_bmi(weight, height)
+
     ideal-weight = calculate_ideal-weight(height, gender)
+    calories = calculate_daily_calories(weight, height, age, gender)
 
     # Вывод результатов
     print("\n=== Результаты ===")
@@ -85,7 +95,9 @@ def main():
     print(f"Категория: {get_detailed_bmi_analysis(bmi)}")
     print(f"Рекомендации: {get_bmi_recommendation(bmi)}")
     print(f"Идеальный вес: {ideal-weight:.1f} кг")
+    print(f"Суточная норма калорий: {calories:.0f} ккал")
 
 if __name__ == "__main__":
     main()
 
+VERSION = "1.0"
