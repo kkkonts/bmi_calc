@@ -29,6 +29,17 @@ def get_bmi_recommendation(bmi):
 
 def calculate_ideal-weight(height, gender='unisex'):
     """По формуле Devine (1974)"""
+def calculate_ideal_weight(height, gender='unisex'):
+    """По формуле Devine (1974)"""
+    if gender.lower() == 'male':
+        return 50 + 2.3 * ((height * 100) - 152.4) / 2.54
+    elif gender.lower() == 'female':
+        return 45.5 + 2.3 * ((height * 100) - 152.4) / 2.54
+    else:
+        return (50 + 45.5) / 2 + 2.3 * ((height * 100) - 152.4) / 2.54
+
+def calculate_daily_calories(weight, height, age, gender, activity_level=1.2):
+    """Формула Миффлина-Сан Жеора"""
     if gender.lower() == 'male':
         return 50 + 2.3 * ((height * 100) - 152.4) / 2.54
     elif gender.lower() == 'female':
@@ -112,6 +123,9 @@ def main():
     ideal-weight = calculate_ideal-weight(height, gender)
     body-fat = calculate_body-fat(bmi, age, gender)
 
+    ideal-weight = calculate_ideal-weight(height, gender)
+    calories = calculate_daily_calories(weight, height, age, gender)
+
     # Вывод результатов
     print("\n=== Результаты ===")
     print(f"Ваш BMI: {bmi:.1f}")
@@ -120,9 +134,9 @@ def main():
     print(f"Идеальный вес: {ideal-weight:.1f} кг")
     print(f"\nПроцент жира в организме: {body-fat:.1f}%")
     print(f"Анализ: {get_body-fat_analysis(body-fat, gender)}")
+    print(f"Суточная норма калорий: {calories:.0f} ккал")
 
 if __name__ == "__main__":
     main()
 
-
-VERSION = "2.0"
+VERSION = "3.0"
