@@ -27,6 +27,8 @@ def get_bmi_recommendation(bmi):
         return "Рекомендуется увеличить физическую активность и скорректировать питание"
 
 
+def calculate_ideal-weight(height, gender='unisex'):
+    """По формуле Devine (1974)"""
 def calculate_ideal_weight(height, gender='unisex'):
     """По формуле Devine (1974)"""
     if gender.lower() == 'male':
@@ -39,10 +41,12 @@ def calculate_ideal_weight(height, gender='unisex'):
 def calculate_daily_calories(weight, height, age, gender, activity_level=1.2):
     """Формула Миффлина-Сан Жеора"""
     if gender.lower() == 'male':
-        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age + 5
+        return 50 + 2.3 * ((height * 100) - 152.4) / 2.54
+    elif gender.lower() == 'female':
+        return 45.5 + 2.3 * ((height * 100) - 152.4) / 2.54
     else:
-        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age - 161
-    return bmr * activity_level
+        return (50 + 45.5) / 2 + 2.3 * ((height * 100) - 152.4) / 2.54
+
 
 def validate_input(value, min_val, max_val):
     try:
@@ -52,6 +56,37 @@ def validate_input(value, min_val, max_val):
         return False
     except ValueError:
         return False
+def calculate_body-fat(bmi, age, gender):
+    """Расчет процента жира в организме по формуле YMCA"""
+    if gender == 'male':
+        return (1.20 * bmi) + (0.23 * age) - 16.2
+    else:
+        return (1.20 * bmi) + (0.23 * age) - 5.4
+
+def get_body-fat_analysis(body-fat, gender):
+    """Анализ процента жира в организме"""
+    if gender == 'male':
+        if body-fat < 6:
+            return "Опасный уровень (необходима медицинская консультация)"
+        elif 6 <= body-fat < 14:
+            return "Атлетическое телосложение"
+        elif 14 <= body-fat < 18:
+            return "Спортивное телосложение"
+        elif 18 <= body-fat < 25:
+            return "Средний уровень"
+        else:
+            return "Высокий процент жира (рекомендуется снижение)"
+    else:
+        if body-fat < 14:
+            return "Опасный уровень (необходима медицинская консультация)"
+        elif 14 <= body-fat < 21:
+            return "Атлетическое телосложение"
+        elif 21 <= body-fat < 25:
+            return "Спортивное телосложение"
+        elif 25 <= body-fat < 32:
+            return "Средний уровень"
+        else:
+            return "Высокий процент жира (рекомендуется снижение)"
 
 def main():
     print("=== BMI Калькулятор ===")
@@ -85,6 +120,8 @@ def main():
 
     # Расчеты
     bmi = calculate_bmi(weight, height)
+    ideal-weight = calculate_ideal-weight(height, gender)
+    body-fat = calculate_body-fat(bmi, age, gender)
 
     ideal-weight = calculate_ideal-weight(height, gender)
     calories = calculate_daily_calories(weight, height, age, gender)
@@ -95,9 +132,11 @@ def main():
     print(f"Категория: {get_detailed_bmi_analysis(bmi)}")
     print(f"Рекомендации: {get_bmi_recommendation(bmi)}")
     print(f"Идеальный вес: {ideal-weight:.1f} кг")
+    print(f"\nПроцент жира в организме: {body-fat:.1f}%")
+    print(f"Анализ: {get_body-fat_analysis(body-fat, gender)}")
     print(f"Суточная норма калорий: {calories:.0f} ккал")
 
 if __name__ == "__main__":
     main()
 
-VERSION = "1.0"
+VERSION = "3.0"
